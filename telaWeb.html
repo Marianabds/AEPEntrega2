@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConectaDoa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #faf7f0;
+            color: #2d3e2b;
+        }
+
+        .login-split {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .login-left {
+            flex: 1.2;
+            background: #2b5e3b;
+            color: white;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .login-left .logo {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        .login-left h1 {
+            font-size: 40px;
+            line-height: 1.25;
+            margin-bottom: 20px;
+        }
+
+        .login-left .ods {
+            margin-top: 60px;
+            font-size: 14px;
+            border-left: 3px solid #f4b942;
+            padding-left: 20px;
+        }
+
+        .login-right {
+            flex: 1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-card h2 {
+            font-size: 28px;
+            color: #2b5e3b;
+            margin-bottom: 8px;
+        }
+
+        .login-card .subtitulo {
+            color: #6b6a5c;
+            margin-bottom: 28px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2dccd;
+            padding-bottom: 8px;
+        }
+
+        .tabs button {
+            background: white;
+            color: #2b5e3b;
+            border: 1px solid #ddd6c8;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .tabs button.ativo {
+            background: #2b5e3b;
+            color: white;
+            border-color: #2b5e3b;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 18px;
+            border: 1px solid #ddd6c8;
+            border-radius: 14px;
+            font-family: inherit;
+            background: #fffef8;
+        }
+
+        button {
+            background: #2b5e3b;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        button:hover {
+            background: #1f4a2e;
+            transform: translateY(-1px);
+        }
+
+        button.secundario {
+            background: #e0a84d;
+        }
+
+        button.outline {
+            background: white;
+            border: 1px solid #2b5e3b;
+            color: #2b5e3b;
+        }
+
+        button.danger {
+            background: #bc4e2c;
+        }
+
+        button.danger:hover {
+            background: #9a3b1f;
+        }
+
+        .btn-cancelar {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+            margin-top: 16px;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-cancelar:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .erro {
+            color: #c0392b;
+            font-size: 13px;
+            margin: 5px 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 12px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2dccd;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo-app {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2b5e3b;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav button {
+            background: none;
+            color: #3d5a3a;
+            font-weight: 500;
+            padding: 8px 14px;
+        }
+
+        .nav button.ativo {
+            background: #2b5e3b;
+            color: white;
+            border-radius: 30px;
+        }
+
+        .conteudo {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .filtros-section {
+            margin-bottom: 48px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, .05);
+            border: 1px solid #ece3d4;
+            transition: .2s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, .08);
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eef3e6;
+            color: #2b5e3b;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 8px;
+        }
+
+        .tag-alta {
+            background: #fce4d6;
+            color: #bc4e2c;
+        }
+
+        .tag-media {
+            background: #ffefcf;
+            color: #c47d2b;
+        }
+
+        .tag-baixa {
+            background: #e0f0e0;
+            color: #2f6b2f;
+        }
+
+        .chat-area {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: 550px;
+        }
+
+        .lista-conv {
+            background: white;
+            border-radius: 24px;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .conv-item {
+            padding: 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .conv-item.ativo {
+            background: #eef3e6;
+        }
+
+        .chat-painel {
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .mensagens {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bubble {
+            max-width: 70%;
+            padding: 10px 16px;
+            border-radius: 22px;
+            font-size: 14px;
+        }
+
+        .bubble.me {
+            background: #2b5e3b;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .bubble.eles {
+            background: #f0ede3;
+            align-self: flex-start;
+        }
+
+        .input-chat {
+            display: flex;
+            gap: 10px;
+            padding: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        .input-chat input {
+            margin: 0;
+            flex: 1;
+        }
+
+        /* ========== MODAL CORRIGIDO ========== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            /* fundo escuro semi-transparente */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-conteudo {
+            background: white;
+            max-width: 580px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 28px;
+            padding: 28px;
+            position: relative;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .vazio {
+            text-align: center;
+            padding: 50px;
+            color: #8b8a7a;
+        }
+
+        .chip-filtro {
+            background: white;
+            color: #2b5e3b;
+            border: 1px solid #ddd6c8;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .chip-filtro.ativo {
+            background: #2b5e3b;
+            color: white;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2b5e3b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            z-index: 200;
+            font-weight: 600;
+        }
+
+        .avatar {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            background: white;
+            color: #2b5e3b;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .perfil-card {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .perfil-topo {
+            background: #2b5e3b;
+            color: white;
+            padding: 34px;
+            text-align: center;
+        }
+
+        .perfil-info {
+            padding: 26px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .perfil-info div {
+            background: #f9f7f0;
+            padding: 16px;
+            border-radius: 18px;
+        }
+
+        .perfil-stats {
+            display: flex;
+            gap: 14px;
+            padding: 0 26px 26px;
+        }
+
+        .stat {
+            flex: 1;
+            background: #eef3e6;
+            border-radius: 18px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat b {
+            font-size: 26px;
+            color: #2b5e3b;
+        }
+
+        .cat-tag {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: #5C8A5A;
+            background: #eef3e6;
+            padding: 4px 10px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+
+        .b-disp {
+            background: #e6f1e7;
+            color: #2e6b2f;
+        }
+
+        .b-res {
+            background: #fbf0dc;
+            color: #c47d2b;
+        }
+
+        .b-doa {
+            background: #eee7df;
+            color: #6b6a5c;
+        }
+
+        .b-pend {
+            background: #fbf0dc;
+            color: #c47d2b;
+        }
+
+        .b-aceito {
+            background: #e6f1e7;
+            color: #2e6b2f;
+        }
+
+        .b-recusado {
+            background: #fce4d6;
+            color: #bc4e2c;
+        }
+
+        .prio {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+
+        .tagp {
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+
+        .p-alta {
+            background: #fce4d6;
+            color: #bc4e2c;
+        }
+
+        .p-media {
+            background: #ffefcf;
+            color: #c47d2b;
+        }
+
+        .p-baixa {
+            background: #e0f0e0;
+            color: #2f6b2f;
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            font-size: 12.5px;
+            color: #6b6a5c;
+            margin-bottom: 13px;
+        }
+
+        .req-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 0;
+            border-top: 1px dashed #e2dccd;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 30px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #2b5e3b;
+            color: #2b5e3b;
+        }
+
+        .danger-t {
+            background: transparent;
+            color: #bc4e2c;
+            border: 1px solid #e9cfc7;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script>
+        const GROQ_API_KEY = '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';
+        let iaDisponivel = false;
+        let timeoutSugestao = null;
+
+        async function testarConexaoGroq() {
+            if (!GROQ_API_KEY || GROQ_API_KEY === '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') {
+                console.warn("Chave da API Groq não configurada. Usando fallback local.");
+                return false;
+            }
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [{ role: "user", content: "Responda apenas com: OK" }],
+                        max_tokens: 5
+                    })
+                });
+                if (response.ok) {
+                    iaDisponivel = true;
+                    console.log("API Groq conectada!");
+                    toast("IA Groq ativada");
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+        function fallbackClassificar(texto) {
+            const t = texto.toLowerCase();
+            if (/(roupa|camiseta|calça|blusa|vestido|short|jaqueta|couro|cinto|sapato|tênis|sandália|chinelo|bota|meia|bermuda|suéter|moletom|casaco)/i.test(t)) return 'Roupas';
+            if (/(cesta|arroz|feijão|leite|óleo|macarrão|enlatado|farinha|açúcar|café)/i.test(t)) return 'Alimentos';
+            if (/(sabonete|shampoo|fralda|papel higiênico|creme dental|absorvente|desodorante|pasta|escova)/i.test(t)) return 'Higiene';
+            if (/(livro|caderno|mochila|estojo|lápis|caneta|borracha|régua|apostila)/i.test(t)) return 'Material escolar';
+            if (/(sofá|mesa|cadeira|armário|estante|poltrona|rack|guarda-roupa|cama|colchão)/i.test(t)) return 'Móveis';
+            if (/(celular|computador|tablet|tv|ventilador|microondas|fogão|geladeira|notebook|teclado|mouse)/i.test(t)) return 'Eletrônicos';
+            if (/(brinquedo|boneca|bola|jogo|quebra-cabeça|pelúcia|video game|carrinho|ursinho)/i.test(t)) return 'Brinquedos';
+            return 'Outros';
+        }
+
+        async function sugerirCategoriaGroq(texto) {
+            if (!texto || texto.length < 3) return null;
+            if (!iaDisponivel) return fallbackClassificar(texto);
+            const prompt = `Classifique o item abaixo em uma das categorias: Alimentos, Roupas, Higiene, Material escolar, Móveis, Eletrônicos, Brinquedos, Outros.
+
+    Exemplos:
+    - "sapato" → Roupas
+    - "camiseta" → Roupas
+    - "calça jeans" → Roupas
+    - "vestido" → Roupas
+    - "casaco de lã" → Roupas
+    - "tênis" → Roupas
+    - "arroz" → Alimentos
+    - "fralda" → Higiene
+    - "livro" → Material escolar
+    - "cadeira" → Móveis
+    - "celular" → Eletrônicos
+    - "boneca" → Brinquedos
+
+Item: "${texto}"
+Categoria (responda APENAS com o nome da categoria):`;
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [{ role: "user", content: prompt }],
+                        temperature: 0,
+                        max_tokens: 20
+                    })
+                });
+                const data = await response.json();
+                let cat = data.choices[0]?.message?.content?.trim() || 'Outros';
+                const validas = ['Alimentos', 'Roupas', 'Higiene', 'Material escolar', 'Móveis', 'Eletrônicos', 'Brinquedos', 'Outros'];
+                if (validas.includes(cat)) return cat;
+                return fallbackClassificar(texto);
+            } catch (e) {
+                console.error(e);
+                return fallbackClassificar(texto);
+            }
+        }
+
+        async function prioridadeComGroq(categoria, texto) {
+            if (!iaDisponivel) return fallbackPrioridade(categoria, texto);
+            const prompt = `Prioridade social deste item: "${texto}" (cat: ${categoria}). Responda apenas: ALTA, MEDIA ou BAIXA.`;
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [{ role: "user", content: prompt }],
+                        temperature: 0,
+                        max_tokens: 10
+                    })
+                });
+                const data = await response.json();
+                let prio = data.choices[0]?.message?.content?.trim().toLowerCase();
+                if (prio === 'alta') return 'alta';
+                if (prio === 'media') return 'media';
+                if (prio === 'baixa') return 'baixa';
+                return 'media';
+            } catch (e) { return fallbackPrioridade(categoria, texto); }
+        }
+
+        function fallbackPrioridade(categoria, texto) {
+            const t = texto.toLowerCase();
+            if (categoria === 'Alimentos' || categoria === 'Higiene') return 'alta';
+            if (t.includes('criança') || categoria === 'Material escolar') return 'alta';
+            if (categoria === 'Brinquedos') return 'baixa';
+            return 'media';
+        }
+
+        let usuarios = [], itens = [], solicitacoes = [], mensagens = [];
+        let usuarioLogado = null, abaAtual = 'explorar', abaAuth = 'login', filtroCat = 'Todas', busca = '', chatAberto = null;
+
+        function idUnico() { return Date.now() + '-' + Math.random().toString(36).substr(2, 6); }
+        function salvar() {
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            localStorage.setItem('itens', JSON.stringify(itens));
+            localStorage.setItem('solicitacoes', JSON.stringify(solicitacoes));
+            localStorage.setItem('mensagens', JSON.stringify(mensagens));
+        }
+        function carregar() {
+            usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            itens = JSON.parse(localStorage.getItem('itens') || '[]');
+            solicitacoes = JSON.parse(localStorage.getItem('solicitacoes') || '[]');
+            mensagens = JSON.parse(localStorage.getItem('mensagens') || '[]');
+            if (usuarios.length === 0) {
+                usuarios.push({ id: idUnico(), nome: 'Ana Doadora', email: 'ana@doa.com', senha: '123', tipo: 'doador', cidade: 'São Paulo' });
+                usuarios.push({ id: idUnico(), nome: 'Carlos Solidário', email: 'carlos@doa.com', senha: '123', tipo: 'beneficiario', cidade: 'São Paulo' });
+                usuarios.push({ id: idUnico(), nome: 'Mariana Apoio', email: 'mariana@doa.com', senha: '123', tipo: 'doador', cidade: 'Rio de Janeiro' });
+                usuarios.push({ id: idUnico(), nome: 'João Cidadão', email: 'joao@doa.com', senha: '123', tipo: 'beneficiario', cidade: 'Belo Horizonte' });
+                salvar();
+            }
+            if (itens.length === 0) {
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Cesta básica completa', descricao: 'Arroz, feijão, óleo, macarrão, farinha, açúcar, leite em pó.', categoria: 'Alimentos', condicao: 'Novo', cidade: 'São Paulo', estado: 'disponivel', data: Date.now() - 86400000, prioridade: 'alta' });
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Kit higiene e fraldas', descricao: 'Sabonetes, shampoo, creme dental, fraldas tamanho G.', categoria: 'Higiene', condicao: 'Usado - bom', cidade: 'Maringá', estado: 'disponivel', data: Date.now() - 172800000, prioridade: 'alta' });
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Casaco infantil', descricao: 'Casaco tamanho 4 anos, ótimo estado.', categoria: 'Roupas', condicao: 'Usado - bom', cidade: 'São Paulo', estado: 'disponivel', data: Date.now(), prioridade: 'media' });
+                itens.push({ id: idUnico(), doadorId: usuarios[2].id, doadorNome: usuarios[2].nome, titulo: 'Mochila escolar', descricao: 'Mochila nova com estojo e cadernos.', categoria: 'Material escolar', condicao: 'Novo', cidade: 'Rio de Janeiro', estado: 'disponivel', data: Date.now() - 43200000, prioridade: 'alta' });
+                itens.push({ id: idUnico(), doadorId: usuarios[2].id, doadorNome: usuarios[2].nome, titulo: 'Celular semi-novo', descricao: 'Smartphone Samsung Galaxy A12, funcionando perfeitamente.', categoria: 'Eletrônicos', condicao: 'Usado - bom', cidade: 'Rio de Janeiro', estado: 'disponivel', data: Date.now() - 21600000, prioridade: 'media' });
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Sofá 2 lugares', descricao: 'Sofá bege, estofado limpo, estrutura firme.', categoria: 'Móveis', condicao: 'Usado - bom', cidade: 'São Paulo', estado: 'disponivel', data: Date.now() - 10800000, prioridade: 'baixa' });
+                itens.push({ id: idUnico(), doadorId: usuarios[2].id, doadorNome: usuarios[2].nome, titulo: 'Boneca e carrinho', descricao: 'Brinquedos educativos para crianças de 3 a 6 anos.', categoria: 'Brinquedos', condicao: 'Usado - bom', cidade: 'Rio de Janeiro', estado: 'disponivel', data: Date.now() - 7200000, prioridade: 'baixa' });
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Ventilador', descricao: 'Ventilador de mesa, 3 velocidades.', categoria: 'Eletrônicos', condicao: 'Usado - regular', cidade: 'São Paulo', estado: 'disponivel', data: Date.now() - 5400000, prioridade: 'media' });
+                itens.push({ id: idUnico(), doadorId: usuarios[2].id, doadorNome: usuarios[2].nome, titulo: 'Fraldas geriátricas', descricao: 'Pacote com 30 fraldas tamanho G.', categoria: 'Higiene', condicao: 'Novo', cidade: 'Rio de Janeiro', estado: 'disponivel', data: Date.now() - 3600000, prioridade: 'alta' });
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Microondas', descricao: 'Microondas 20L, funcionando bem.', categoria: 'Eletrônicos', condicao: 'Usado - bom', cidade: 'São Paulo', estado: 'disponivel', data: Date.now() - 1800000, prioridade: 'media' });
+                itens.push({ id: idUnico(), doadorId: usuarios[2].id, doadorNome: usuarios[2].nome, titulo: 'Livros infantis', descricao: '10 livros de histórias infantis.', categoria: 'Material escolar', condicao: 'Usado - bom', cidade: 'Rio de Janeiro', estado: 'disponivel', data: Date.now() - 900000, prioridade: 'baixa' });
+                itens.push({ id: idUnico(), doadorId: usuarios[0].id, doadorNome: usuarios[0].nome, titulo: 'Cobertores', descricao: '2 cobertores de lã, ótimo estado.', categoria: 'Roupas', condicao: 'Usado - bom', cidade: 'São Paulo', estado: 'disponivel', data: Date.now(), prioridade: 'alta' });
+                salvar();
+            }
+        }
+
+        function toast(msg) {
+            let t = document.querySelector('.toast');
+            if (t) t.remove();
+            t = document.createElement('div');
+            t.className = 'toast';
+            t.innerText = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 2500);
+        }
+
+        function renderizar() {
+            const root = document.getElementById('root');
+            if (!usuarioLogado) {
+                root.innerHTML = telaLoginSplit();
+                document.querySelectorAll('[data-acao]').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        const acao = el.dataset.acao;
+                        if (acao === 'mudarAuth') { abaAuth = el.dataset.tab; renderizar(); }
+                        else if (acao === 'login') fazerLogin();
+                        else if (acao === 'cadastro') fazerCadastro();
+                        else if (acao === 'demo') entrarDemo();
+                    });
+                });
+            } else {
+                root.innerHTML = telaApp();
+                anexarEventosApp();
+            }
+        }
+
+        function telaLoginSplit() {
+            return `<div class="login-split">
+            <div class="login-left">
+                <div class="logo">ConectaDoa</div>
+                <div><h1>Plataforma de doações entre pessoas</h1></div>
+                <div class="ods"><strong>ODS 1 — Erradicação da Pobreza</strong><br>Tecnologia a favor da solidariedade.</div>
+            </div>
+            <div class="login-right">
+                <div class="login-card">
+                    <h2>${abaAuth === 'login' ? 'Bem-vindo de volta' : 'Crie sua conta'}</h2>
+                    <p class="subtitulo">${abaAuth === 'login' ? 'Acesse para doar ou solicitar.' : 'Junte-se à rede.'}</p>
+                    <div class="tabs">
+                        <button data-acao="mudarAuth" data-tab="login" class="${abaAuth === 'login' ? 'ativo' : ''}">Entrar</button>
+                        <button data-acao="mudarAuth" data-tab="cadastro" class="${abaAuth === 'cadastro' ? 'ativo' : ''}">Cadastrar</button>
+                    </div>
+                    ${abaAuth === 'login' ? `
+                        <input id="loginEmail" placeholder="E-mail" value="ana@doa.com">
+                        <input id="loginSenha" type="password" placeholder="Senha" value="123">
+                        <div class="erro" id="erroAuth"></div>
+                        <button data-acao="login">Entrar</button>
+                        <button data-acao="demo" class="secundario" style="margin-top:12px">Modo visitante</button>
+                    ` : `
+                        <input id="cadNome" placeholder="Nome completo">
+                        <input id="cadEmail" placeholder="E-mail">
+                        <input id="cadSenha" type="password" placeholder="Senha, mínimo 4 caracteres">
+                        <select id="cadTipo"><option value="doador">Doador</option><option value="beneficiario">Beneficiário</option><option value="ambos">Ambos</option></select>
+                        <input id="cadCidade" placeholder="Cidade">
+                        <div class="erro" id="erroAuth"></div>
+                        <button data-acao="cadastro">Criar conta</button>
+                    `}
+                </div>
+            </div>
+        </div>`;
+        }
+
+        function fazerLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+            const user = usuarios.find(u => u.email === email && u.senha === senha);
+            if (user) { usuarioLogado = user; renderizar(); }
+            else document.getElementById('erroAuth').innerText = 'E-mail ou senha inválidos';
+        }
+        function fazerCadastro() {
+            const nome = document.getElementById('cadNome').value.trim();
+            const email = document.getElementById('cadEmail').value.trim();
+            const senha = document.getElementById('cadSenha').value;
+            const tipo = document.getElementById('cadTipo').value;
+            const cidade = document.getElementById('cadCidade').value.trim();
+            if (!nome || !email || senha.length < 4 || !cidade) {
+                document.getElementById('erroAuth').innerText = 'Preencha todos os campos';
+                return;
+            }
+            if (usuarios.find(u => u.email === email)) {
+                document.getElementById('erroAuth').innerText = 'E-mail já cadastrado';
+                return;
+            }
+            const novo = { id: idUnico(), nome, email, senha, tipo, cidade, data: Date.now() };
+            usuarios.push(novo); salvar(); usuarioLogado = novo; renderizar();
+        }
+        function entrarDemo() {
+            let demo = usuarios.find(u => u.email === 'demo@visitante.com');
+            if (!demo) {
+                demo = { id: idUnico(), nome: 'Visitante', email: 'demo@visitante.com', senha: 'demo', tipo: 'ambos', cidade: 'São Paulo', data: Date.now() };
+                usuarios.push(demo); salvar();
+            }
+            usuarioLogado = demo; renderizar();
+        }
+
+        function telaApp() {
+            return `<div class="topbar">
+            <div class="logo-app">ConectaDoa</div>
+            <div class="nav">
+                <button data-acao="aba" data-val="explorar" class="${abaAtual === 'explorar' ? 'ativo' : ''}">Explorar</button>
+                <button data-acao="aba" data-val="atividade" class="${abaAtual === 'atividade' ? 'ativo' : ''}">Minhas ações</button>
+                <button data-acao="aba" data-val="mensagens" class="${abaAtual === 'mensagens' ? 'ativo' : ''}">Mensagens</button>
+                <button data-acao="aba" data-val="perfil" class="${abaAtual === 'perfil' ? 'ativo' : ''}">Perfil</button>
+            </div>
+            <div><button data-acao="abrirModalDoar">+ Doar item</button><button data-acao="logout" class="outline" style="margin-left:12px">Sair</button></div>
+        </div>
+        <div class="conteudo">
+            ${abaAtual === 'explorar' ? explorarHtml() : ''}
+            ${abaAtual === 'atividade' ? atividadeHtml() : ''}
+            ${abaAtual === 'mensagens' ? mensagensHtml() : ''}
+            ${abaAtual === 'perfil' ? perfilHtml() : ''}
+        </div>`;
+        }
+
+        function explorarHtml() {
+            let lista = itens.filter(i => i.estado === 'disponivel' && i.doadorId !== usuarioLogado.id);
+            if (filtroCat !== 'Todas') lista = lista.filter(i => i.categoria === filtroCat);
+            if (busca.trim()) lista = lista.filter(i => (i.titulo + i.descricao + i.cidade).toLowerCase().includes(busca.toLowerCase()));
+            const categorias = ['Todas', 'Alimentos', 'Roupas', 'Higiene', 'Material escolar', 'Móveis', 'Eletrônicos', 'Brinquedos', 'Outros'];
+            return `<div class="filtros-section">
+            <input type="text" id="campoBusca" placeholder="Buscar..." value="${busca}" style="width:100%; padding:14px; border-radius:60px;">
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+                ${categorias.map(cat => `<button data-acao="filtroCat" data-cat="${cat}" class="chip-filtro ${filtroCat === cat ? 'ativo' : ''}">${cat}</button>`).join('')}
+            </div>
+        </div>
+        <div class="grid">${lista.length ? lista.map(cardItem).join('') : '<div class="vazio">Nenhum item encontrado</div>'}</div>`;
+        }
+
+        function cardItem(item) {
+            const pc = item.prioridade === 'alta' ? 'tag-alta' : item.prioridade === 'media' ? 'tag-media' : 'tag-baixa';
+            return `<div class="card">
+            <div><span class="tag">${item.categoria}</span><span class="tag">${item.condicao}</span><span class="tag ${pc}">${item.prioridade}</span></div>
+            <h3 style="margin:10px 0 6px">${item.titulo}</h3>
+            <p style="color:#6b6a5c">${item.descricao.substring(0, 80)}</p>
+            <div style="margin:12px 0">📍 ${item.cidade} · 👤 ${item.doadorNome}</div>
+            <button data-acao="verItem" data-id="${item.id}">Ver detalhes</button>
+        </div>`;
+        }
+
+        function atividadeHtml() {
+            const minhasDoacoes = itens.filter(i => i.doadorId === usuarioLogado.id);
+            const meusPedidos = solicitacoes.filter(s => s.solicitanteId === usuarioLogado.id);
+            const estadoBadge = (e) => ({ disponivel: '<span class="badge b-disp">Disponível</span>', reservado: '<span class="badge b-res">Reservado</span>', doado: '<span class="badge b-doa">Doado</span>' }[e] || '');
+            const prioridadeTag = (p) => `<span class="tagp p-${p}">Prioridade ${p}</span>`;
+
+            let doacoesHtml = '';
+            if (minhasDoacoes.length === 0) {
+                doacoesHtml = '<div class="vazio">Nenhuma doação publicada ainda</div>';
+            } else {
+                doacoesHtml = `<div class="grid">` + minhasDoacoes.map(item => {
+                    const solicitacoesDoItem = solicitacoes.filter(s => s.itemId === item.id);
+                    const rows = solicitacoesDoItem.map(sol => `
+                    <div class="req-row">
+                        <div class="avatar" style="width:32px;height:32px;font-size:12px;background:#e0e0e0;color:#2b5e3b">${sol.solicitanteNome.charAt(0)}</div>
+                        <div style="flex:1">
+                            <div><b>${sol.solicitanteNome}</b> ${sol.status === 'pendente' ? '<span class="badge b-pend">Pendente</span>' : (sol.status === 'aceito' ? '<span class="badge b-aceito">Aceito</span>' : '<span class="badge b-recusado">Recusado</span>')}</div>
+                            <small>${sol.mensagem.substring(0, 50)}</small>
+                        </div>
+                        ${sol.status === 'pendente' ? `
+                            <button class="btn-sm" data-acao="responder" data-id="${sol.id}" data-decisao="aceito">Aceitar</button>
+                            <button class="btn-sm danger-t" data-acao="responder" data-id="${sol.id}" data-decisao="recusado">Recusar</button>
+                        ` : `
+                            <button class="btn-sm btn-outline" data-acao="abrirChat" data-cid="${sol.id}">Conversar</button>
+                        `}
+                    </div>
+                `).join('');
+                    return `<div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <div class="cat-tag">${item.categoria}</div>
+                        ${estadoBadge(item.estado)}
+                    </div>
+                    <h3 style="margin:12px 0 5px">${item.titulo}</h3>
+                    <div class="prio">${prioridadeTag(item.prioridade)}</div>
+                    <div class="meta"> ${item.cidade} · ${solicitacoesDoItem.length} interesse(s)</div>
+                    ${rows || '<p>Nenhum interesse ainda.</p>'}
+                    ${item.estado === 'reservado' ? `<button class="btn-sm" data-acao="concluir" data-id="${item.id}" style="margin-top:13px">Marcar como doado</button>` : ''}
+                    <button class="btn-cancelar" data-acao="excluirDoacao" data-id="${item.id}">Cancelar</button>
+                </div>`;
+                }).join('') + `</div>`;
+            }
+
+            let pedidosHtml = '';
+            if (meusPedidos.length === 0) {
+                pedidosHtml = '<div class="vazio">Você ainda não fez nenhum pedido</div>';
+            } else {
+                pedidosHtml = `<div class="grid">` + meusPedidos.map(sol => {
+                    const item = itens.find(i => i.id === sol.itemId);
+                    if (!item) return '';
+                    return `<div class="card">
+                    <div class="cat-tag">${item.categoria}</div>
+                    <h3>${item.titulo}</h3>
+                    <div class="meta">Doador: ${item.doadorNome} · Status: ${sol.status}</div>
+                    <button class="btn-sm btn-outline" data-acao="abrirChat" data-cid="${sol.id}">Conversar</button>
+                </div>`;
+                }).join('') + `</div>`;
+            }
+
+            return `<h2 style="margin-bottom:14px">Minhas doações</h2>${doacoesHtml}<h2 style="margin:32px 0 14px">Meus pedidos</h2>${pedidosHtml}`;
+        }
+
+        function mensagensHtml() {
+            let conversas = solicitacoes.filter(s => s.doadorId === usuarioLogado.id || s.solicitanteId === usuarioLogado.id);
+            if (conversas.length === 0) return '<div class="vazio">Nenhuma conversa iniciada</div>';
+            if (!chatAberto && conversas.length) chatAberto = conversas[0].id;
+            const msgs = mensagens.filter(m => m.solicitacaoId === chatAberto).sort((a, b) => a.data - b.data);
+            const solAtual = solicitacoes.find(s => s.id === chatAberto);
+            const outroNome = solAtual ? (solAtual.doadorId === usuarioLogado.id ? solAtual.solicitanteNome : solAtual.doadorNome) : '';
+            return `<div class="chat-area">
+            <div class="lista-conv">
+                ${conversas.map(conv => {
+                const outro = conv.doadorId === usuarioLogado.id ? conv.solicitanteNome : conv.doadorNome;
+                return `<div data-acao="abrirChat" data-cid="${conv.id}" class="conv-item ${chatAberto === conv.id ? 'ativo' : ''}">
+                        <b>${outro}</b><br><small>${conv.itemTitulo}</small>
+                    </div>`;
+            }).join('')}
+            </div>
+            <div class="chat-painel">
+                <div style="padding:14px; border-bottom:1px solid #e2dccd"><b>${outroNome}</b> · ${solAtual?.itemTitulo}</div>
+                <div class="mensagens" id="msgArea">
+                    ${msgs.map(m => `<div class="bubble ${m.remetenteId === usuarioLogado.id ? 'me' : 'eles'}">${m.texto}<div style="font-size:10px">${new Date(m.data).toLocaleTimeString()}</div></div>`).join('')}
+                </div>
+                <div class="input-chat">
+                    <input id="chatInput" placeholder="Digite sua mensagem...">
+                    <button data-acao="enviarMsg">Enviar</button>
+                </div>
+            </div>
+        </div>`;
+        }
+
+        function perfilHtml() {
+            const publi = itens.filter(i => i.doadorId === usuarioLogado.id).length;
+            const doadas = itens.filter(i => i.doadorId === usuarioLogado.id && i.estado === 'doado').length;
+            const ped = solicitacoes.filter(s => s.solicitanteId === usuarioLogado.id).length;
+            const ini = usuarioLogado.nome.charAt(0).toUpperCase();
+            return `<div class="card perfil-card">
+            <div class="perfil-topo"><div class="avatar">${ini}</div><h2>${usuarioLogado.nome}</h2><p>${usuarioLogado.tipo}</p></div>
+            <div class="perfil-info"><div><strong>E-mail</strong><br>${usuarioLogado.email}</div><div><strong>Cidade</strong><br>${usuarioLogado.cidade}</div></div>
+            <div class="perfil-stats"><div class="stat"><b>${publi}</b><br>Publicados</div><div class="stat"><b>${doadas}</b><br>Concluídos</div><div class="stat"><b>${ped}</b><br>Pedidos</div></div>
+            <div class="perfil-acoes"><button data-acao="logout" class="secundario">Sair da conta</button></div>
+        </div>`;
+        }
+
+        function anexarEventosApp() {
+            document.body.addEventListener('click', function (e) {
+                const el = e.target.closest('[data-acao]');
+                if (!el) return;
+                const acao = el.dataset.acao;
+
+                if (acao === 'aba') {
+                    abaAtual = el.dataset.val;
+                    chatAberto = null;
+                    renderizar();
+                }
+                else if (acao === 'logout') {
+                    usuarioLogado = null;
+                    chatAberto = null;
+                    renderizar();
+                }
+                else if (acao === 'abrirModalDoar') abrirModalDoar();
+                else if (acao === 'fecharModal') fecharModal();
+                else if (acao === 'publicarItem') publicarItem();
+                else if (acao === 'verItem') verItem(el.dataset.id);
+                else if (acao === 'solicitarItem') solicitarItem(el.dataset.id);
+                else if (acao === 'responder') responderSolicitacao(el.dataset.id, el.dataset.decisao);
+                else if (acao === 'concluir') marcarConcluido(el.dataset.id);
+                else if (acao === 'excluirDoacao') excluirDoacao(el.dataset.id);
+                else if (acao === 'abrirChat') {
+                    chatAberto = el.dataset.cid;
+                    abaAtual = 'mensagens';
+                    renderizar();
+                    setTimeout(() => { const a = document.getElementById('msgArea'); if (a) a.scrollTop = a.scrollHeight; }, 50);
+                }
+                else if (acao === 'enviarMsg') enviarMensagem();
+                else if (acao === 'filtroCat') {
+                    filtroCat = el.dataset.cat;
+                    renderizar();
+                }
+            });
+
+            const buscaInput = document.getElementById('campoBusca');
+            if (buscaInput) buscaInput.addEventListener('input', e => { busca = e.target.value; renderizar(); });
+
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') enviarMensagem(); });
+        }
+
+        function excluirDoacao(itemId) {
+            const item = itens.find(i => i.id === itemId);
+            if (!item) return;
+            if (confirm(`Tem certeza que deseja excluir a doação "${item.titulo}"? Esta ação não pode ser desfeita.`)) {
+                const solicitacoesRelacionadas = solicitacoes.filter(s => s.itemId === itemId);
+                solicitacoesRelacionadas.forEach(sol => {
+                    const msgsToRemove = mensagens.filter(m => m.solicitacaoId === sol.id);
+                    msgsToRemove.forEach(m => {
+                        const idx = mensagens.findIndex(msg => msg.id === m.id);
+                        if (idx !== -1) mensagens.splice(idx, 1);
+                    });
+                    const idxSol = solicitacoes.findIndex(s => s.id === sol.id);
+                    if (idxSol !== -1) solicitacoes.splice(idxSol, 1);
+                });
+                const idxItem = itens.findIndex(i => i.id === itemId);
+                if (idxItem !== -1) itens.splice(idxItem, 1);
+                salvar();
+                renderizar();
+                toast(`Doação "${item.titulo}" excluída.`);
+            }
+        }
+
+        function abrirModalDoar() {
+            fecharModal();
+            const html = `<div class="modal" id="modalDoar"><div class="modal-conteudo">
+            <h3>Doar item com IA Groq (sugestão em tempo real)</h3>
+            <input id="dTitulo" placeholder="Título do item">
+            <textarea id="dDesc" rows="3" placeholder="Descrição"></textarea>
+            <select id="dCategoria">
+                <option>Alimentos</option><option>Roupas</option><option>Higiene</option><option>Material escolar</option>
+                <option>Móveis</option><option>Eletrônicos</option><option>Brinquedos</option><option>Outros</option>
+            </select>
+            <select id="dCondicao"><option>Novo</option><option>Seminovo</option><option>Usado - bom</option><option>Usado - regular</option></select>
+            <input id="dCidade" value="${usuarioLogado.cidade}">
+            <div id="iaSugestao" style="background:#edf2e7;padding:10px;border-radius:16px;margin:12px 0;font-size:13px">✦ A categoria será atualizada automaticamente conforme você digita.</div>
+            <div class="erro" id="erroPub"></div>
+            <button data-acao="publicarItem">Publicar doação</button>
+            <button data-acao="fecharModal" class="secundario">Cancelar</button>
+        </div></div>`;
+            document.body.insertAdjacentHTML('beforeend', html);
+            const descArea = document.getElementById('dDesc');
+            const catSelect = document.getElementById('dCategoria');
+            const iaDiv = document.getElementById('iaSugestao');
+            const updateSuggestion = async () => {
+                const texto = descArea.value;
+                if (!texto || texto.length < 3) {
+                    iaDiv.innerHTML = '✦ Digite a descrição para receber sugestão de categoria.';
+                    return;
+                }
+                iaDiv.innerHTML = '✦ IA analisando...';
+                const categoriaSugerida = await sugerirCategoriaGroq(texto);
+                if (categoriaSugerida) {
+                    catSelect.value = categoriaSugerida;
+                    iaDiv.innerHTML = `✦ Categoria sugerida: <b>${categoriaSugerida}</b> (baseado na descrição)`;
+                } else {
+                    iaDiv.innerHTML = '✦ Não foi possível obter sugestão. Selecione manualmente.';
+                }
+            };
+            descArea.addEventListener('input', () => {
+                clearTimeout(timeoutSugestao);
+                timeoutSugestao = setTimeout(updateSuggestion, 800);
+            });
+        }
+
+        async function publicarItem() {
+            const titulo = document.getElementById('dTitulo').value.trim();
+            const desc = document.getElementById('dDesc').value.trim();
+            const cidade = document.getElementById('dCidade').value.trim();
+            const condicao = document.getElementById('dCondicao').value;
+            const categoria = document.getElementById('dCategoria').value;
+            if (!titulo || !desc) {
+                document.getElementById('erroPub').innerText = 'Preencha título e descrição';
+                return;
+            }
+            const btn = document.querySelector('[data-acao="publicarItem"]');
+            const originalText = btn.innerText;
+            btn.innerText = '✦ IA Groq processando...';
+            btn.disabled = true;
+            try {
+                const textoCompleto = titulo + " " + desc;
+                let prioridade;
+                if (iaDisponivel) {
+                    prioridade = await prioridadeComGroq(categoria, textoCompleto);
+                } else {
+                    prioridade = fallbackPrioridade(categoria, textoCompleto);
+                }
+                const novoItem = {
+                    id: idUnico(), doadorId: usuarioLogado.id, doadorNome: usuarioLogado.nome,
+                    titulo, descricao: desc, categoria, condicao, cidade,
+                    estado: 'disponivel', data: Date.now(), prioridade
+                };
+                itens.push(novoItem); salvar(); fecharModal(); renderizar();
+                toast(`Item publicado! Categoria: ${categoria} | Prioridade: ${prioridade}`);
+            } catch (e) {
+                document.getElementById('erroPub').innerText = 'Erro ao processar. Tente novamente.';
+                console.error(e);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function verItem(id) {
+            const item = itens.find(i => i.id === id);
+            if (!item) {
+                toast("Item não encontrado");
+                return;
+            }
+
+            // Remove qualquer modal aberto antes (evita duplicação)
+            fecharModal();
+
+            const jaSolicitou = solicitacoes.some(s => s.itemId === id && s.solicitanteId === usuarioLogado.id);
+            const isDisponivel = item.estado === 'disponivel';
+            const podeSolicitar = isDisponivel && !jaSolicitou && usuarioLogado.id !== item.doadorId && (usuarioLogado.tipo === 'beneficiario' || usuarioLogado.tipo === 'ambos');
+
+            const modalHtml = `
+                <div class="modal" id="modalItem">
+                    <div class="modal-conteudo">
+                        <div>
+                            <span class="tag">${item.categoria}</span>
+                            <span class="tag">${item.condicao}</span>
+                            <span class="tag ${item.prioridade === 'alta' ? 'tag-alta' : (item.prioridade === 'media' ? 'tag-media' : 'tag-baixa')}">
+                                Prioridade ${item.prioridade}
+                            </span>
+                        </div>
+                        <h3 style="margin: 16px 0 8px">${item.titulo}</h3>
+                        <p style="margin-bottom: 12px">${item.descricao}</p>
+                        <div style="margin-bottom: 8px"><strong>Doador:</strong> ${item.doadorNome}</div>
+                        <div style="margin-bottom: 16px"><strong>Cidade:</strong> ${item.cidade}</div>
+                        ${!isDisponivel ? '<p style="color:#bc4e2c">Este item não está mais disponível.</p>' : ''}
+                        ${isDisponivel && jaSolicitou ? '<p>Você já solicitou este item. Aguarde a resposta do doador.</p>' : ''}
+                        ${podeSolicitar ? `
+                            <textarea id="msgSolic" rows="3" placeholder="Escreva uma mensagem para o doador (ex: tenho interesse, posso retirar...)" style="width:100%; margin-top: 10px"></textarea>
+                            <button data-acao="solicitarItem" data-id="${item.id}" style="margin-top: 12px; width:100%">Demonstrar interesse</button>
+                        ` : ''}
+                        <button data-acao="fecharModal" class="secundario" style="margin-top: 20px; width:100%">Fechar</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Fechar ao clicar fora do conteúdo (no fundo escuro)
+            const modalDiv = document.getElementById('modalItem');
+            modalDiv.addEventListener('click', (e) => {
+                if (e.target === modalDiv) fecharModal();
+            });
+        }
+
+        function solicitarItem(itemId) {
+            const item = itens.find(i => i.id === itemId);
+            if (!item || item.estado !== 'disponivel') {
+                toast("Item não disponível para solicitação");
+                fecharModal();
+                return;
+            }
+            const jaSolicitou = solicitacoes.some(s => s.itemId === itemId && s.solicitanteId === usuarioLogado.id);
+            if (jaSolicitou) {
+                toast("Você já demonstrou interesse neste item.");
+                fecharModal();
+                return;
+            }
+
+            const msg = document.getElementById('msgSolic')?.value.trim();
+            const mensagemFinal = msg || `Olá, tenho interesse em "${item.titulo}". Podemos conversar?`;
+
+            const novaSol = {
+                id: idUnico(),
+                itemId,
+                itemTitulo: item.titulo,
+                doadorId: item.doadorId,
+                doadorNome: item.doadorNome,
+                solicitanteId: usuarioLogado.id,
+                solicitanteNome: usuarioLogado.nome,
+                mensagem: mensagemFinal,
+                status: 'pendente',
+                data: Date.now()
+            };
+            solicitacoes.push(novaSol);
+
+            mensagens.push({
+                id: idUnico(),
+                solicitacaoId: novaSol.id,
+                remetenteId: usuarioLogado.id,
+                texto: mensagemFinal,
+                data: Date.now()
+            });
+
+            salvar();
+            fecharModal();
+            renderizar();
+            toast("Interesse enviado! O doador será notificado.");
+        }
+
+        function responderSolicitacao(solId, decisao) {
+            const sol = solicitacoes.find(s => s.id === solId);
+            if (sol) {
+                sol.status = decisao;
+                if (decisao === 'aceito') {
+                    const item = itens.find(i => i.id === sol.itemId);
+                    if (item && item.estado === 'disponivel') item.estado = 'reservado';
+                }
+                const textoMsg = decisao === 'aceito' ? 'Pedido aceito! O item foi reservado para você.' : 'Pedido recusado pelo doador.';
+                mensagens.push({ id: idUnico(), solicitacaoId: solId, remetenteId: 'sistema', texto: textoMsg, data: Date.now() });
+                salvar(); renderizar(); toast(decisao === 'aceito' ? 'Pedido aceito!' : 'Pedido recusado');
+            }
+        }
+
+        function marcarConcluido(itemId) {
+            const item = itens.find(i => i.id === itemId);
+            if (item && item.estado === 'reservado') {
+                item.estado = 'doado'; salvar(); renderizar(); toast('Doação concluída!');
+            }
+        }
+
+        function enviarMensagem() {
+            const input = document.getElementById('chatInput');
+            if (!input || !input.value.trim()) return;
+            const texto = input.value;
+            const sol = solicitacoes.find(s => s.id === chatAberto);
+            if (sol) {
+                mensagens.push({ id: idUnico(), solicitacaoId: chatAberto, remetenteId: usuarioLogado.id, texto, data: Date.now() });
+                salvar(); input.value = ''; renderizar();
+                setTimeout(() => { const a = document.getElementById('msgArea'); if (a) a.scrollTop = a.scrollHeight; }, 30);
+            }
+        }
+
+        function fecharModal() {
+            const m = document.querySelector('.modal');
+            if (m) m.remove();
+        }
+
+        async function start() {
+            await testarConexaoGroq();
+            carregar();
+            renderizar();
+        }
+        start();
+    </script>
+</body>
+
+</html>
